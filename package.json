@@ -1,0 +1,19 @@
+{
+  "name": "iot-assessment-5",
+  "version": "0.0.1",
+  "description": "Automated Doorbell using facebook messenger and 2 FRDM-K64F boards communicating over ZigBee",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LouisPryer/iot-assessment-5.git"
+  },
+  "author": "Louis Pryer, Sam Hodby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LouisPryer/iot-assessment-5/issues"
+  },
+  "homepage": "https://github.com/LouisPryer/iot-assessment-5#readme"
+}
