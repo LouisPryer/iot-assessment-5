@@ -6,5 +6,5 @@ It will then post a message to a facebook group, await for a response and send a
 
 This repo requires the following node modules:
 
-- ![facebook-chat-api](https://www.npmjs.com/package/facebook-chat-api)
-- ![serialport](https://www.npmjs.com/package/serialport)
+- [facebook-chat-api](https://www.npmjs.com/package/facebook-chat-api)
+- [serialport](https://www.npmjs.com/package/serialport)
