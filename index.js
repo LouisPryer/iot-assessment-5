@@ -16,6 +16,7 @@ try {
 function attemptReconnect(attempts) {
   var count = attempts || 0;
   var connected = false;
+
   port.on("open", function(error) {
     if(!error) return true;
     count++;
@@ -28,30 +29,36 @@ function attemptReconnect(attempts) {
   });
 }
 
-port.on("data", function(data) {
-  login({email: "ourhousein@gmail.co", password: "theMidd1e0fourStreet"}, function(err, api) {
-    if(err) return callback(err);
-    console.log("logged in");
+function sendDataToPort (data) {
+  if(!data) return;
+  port.write(data, function(err) {
+    if(err) {
+      attemptReconnect(0);
+      sendDataToPort(data);
+    }
+  });
+}
 
-    api.sendMessage("Somebody is at the door. Reply 'OMW' to notify your visitor your answering the door", 1672970032981530);
-    api.listen(function callback(err, message) {
-      if(message.body.toUpperCase() == "OMW") {
-        var name = message.senderName;
-        console.log(message);
-        port.write(name, function(err, results) {
-          if(err) {
-            //send another message to say malfunction?
-          }
-        });
-      }
-    });
+port.on("data", function(data) {
+  login({email: "ourhousein@gmail.com", password: "theMidd1e0fourStreet"}, function(err, api) {
+    if(err) sendDataToPort("N");
+  });
+  console.log("logged in");
+
+  api.sendMessage("Somebody is at the door. Reply 'OMW' to notify your visitor your answering the door", 1672970032981530);
+  api.listen(function callback(err, message) {
+    if(message.body.toUpperCase() == "OMW") {
+      var name = message.senderName;
+      console.log(message);
+      sendDataToPort(name.charAt(0));
+    }
   });
 });
 
 port.on("error", function() {
-
+  attemptReconnect(0);
 });
 
 port.on("close", function() {
-
+  attemptReconnect(0);
 });
