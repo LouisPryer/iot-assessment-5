@@ -18,16 +18,19 @@ try {
 function attemptReconnect(attempts) {
   var count = attempts || 0;
   var connected = false;
-
-  port.on("open", function(error) {
-    if(!error) return true;
+  port.open(function(error) {
+    if(!error) {
+      return true;
+    }
     count++;
-    console.log("Failed connection");
     if(count > 5) {
       console.log("Maximum attempts reached, please check device and COM port before continuing further.");
       process.exit();
     }
-    attemptReconnect(count);
+    setTimeout(function() {
+      console.log('Failed to connect, will wait 2 seconds till next attempt. Current fail count at: ' + count);
+      attemptReconnect(count);
+    }, 2000);
   });
 }
 
@@ -40,6 +43,14 @@ function sendDataToPort (data) {
     }
   });
 }
+
+port.on("error", function() {
+  attemptReconnect(0);
+});
+
+port.on("close", function() {
+  attemptReconnect(0);
+});
 
 port.on("data", function(data) {
   login({email: "ourhousein@gmail.com", password: "theMidd1e0fourStreet"}, function(err, api) {
@@ -54,12 +65,4 @@ port.on("data", function(data) {
       }
     });
   });
-});
-
-port.on("error", function() {
-  attemptReconnect(0);
-});
-
-port.on("close", function() {
-  attemptReconnect(0);
 });
