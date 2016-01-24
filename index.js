@@ -3,14 +3,16 @@ var serial = require("serialport").SerialPort;
 var port;
 
 try {
-  port = new serial("COM5", {
+  port = new serial("COM3", {
     baudrate: 38400,
     dataBits: 8,
     stopBits: 1,
     parityBits: "none"
   });
+  console.log("Connected on port COM3");
 } catch(e) {
   console.log("Failed to connect to com port, please check port number is correct");
+  process.exit();
 }
 
 function attemptReconnect(attempts) {
@@ -42,16 +44,15 @@ function sendDataToPort (data) {
 port.on("data", function(data) {
   login({email: "ourhousein@gmail.com", password: "theMidd1e0fourStreet"}, function(err, api) {
     if(err) sendDataToPort("N");
-  });
-  console.log("logged in");
-
-  api.sendMessage("Somebody is at the door. Reply 'OMW' to notify your visitor your answering the door", 1672970032981530);
-  api.listen(function callback(err, message) {
-    if(message.body.toUpperCase() == "OMW") {
-      var name = message.senderName;
-      console.log(message);
-      sendDataToPort(name.charAt(0));
-    }
+    console.log("logged in");
+    api.sendMessage("Somebody is at the door. Reply 'OMW' to notify your visitor your answering the door", 1672970032981530);
+    api.listen(function callback(err, message) {
+      if(message.body.toUpperCase() == "OMW") {
+        var name = message.senderName;
+        console.log(message);
+        sendDataToPort(name.charAt(0));
+      }
+    });
   });
 });
 
