@@ -2,18 +2,13 @@ var login = require("facebook-chat-api");
 var serial = require("serialport").SerialPort;
 var port;
 
-try {
-  port = new serial("COM3", {
-    baudrate: 38400,
-    dataBits: 8,
-    stopBits: 1,
-    parityBits: "none"
-  });
-  console.log("Connected on port COM3");
-} catch(e) {
-  console.log("Failed to connect to com port, please check port number is correct");
-  process.exit();
-}
+port = new serial("COM3", {
+  baudrate: 38400,
+  dataBits: 8,
+  stopBits: 1,
+  parityBits: "none"
+});
+console.log("Connected on port COM3");
 
 function attemptReconnect(attempts) {
   var count = attempts || 0;
