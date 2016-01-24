@@ -9,6 +9,7 @@ Serial host (USBTX, USBRX);
 Serial xbee (D1, D0);
 
 int main (void) {
+  redLed = 1;
   host.baud(38400);
   bool xbeeWaiting = true;
   bool hostWaiting = false;
