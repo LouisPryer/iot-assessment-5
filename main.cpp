@@ -47,40 +47,43 @@ int main (void)
             sleep();
         }
         
-        xbee.putc(send);
-        wait(0.5);
-        if(xbee.readable())
-        {
-            char c = xbee.getc();
-            
-            if (c == receive)
+        else {
+            xbee.printf(&send);
+            wait(0.5);
+            if(xbee.readable())
             {
-                lcd.printf("Please wait...");
-                int waiting = 0;
-                while (waiting < 60)
+                char c = xbee.getc();
+                
+                if (c == receive)
                 {
-                    if(xbee.readable())
+                    lcd.printf("Please wait...");
+                    int waiting = 0;
+                    while (waiting < 60)
                     {
-                        char d = xbee.getc();
-                        switch (d) {
-                            case 'S' : lcd.cls(); lcd.locate(1,1); lcd.printf("Sam is on his way and will be with you shortly");
-                            case 'L' : lcd.cls(); lcd.locate(1,1); lcd.printf("Louis is on his way and will be with you shortly");
-                            case 'M' : lcd.cls(); lcd.locate(1,1); lcd.printf("Max is on his way and will be with you shortly");
-                            case 'J' : lcd.cls(); lcd.locate(1,1); lcd.printf("Jemma is on her way and will be with you shortly");
-                            default : lcd.cls(); lcd.locate(1,1); lcd.printf("Please wait, someone will be with you shortly");
-                        }    
+                        if(xbee.readable())
+                        {
+                            char d = xbee.getc();
+                            switch (d) {
+                                case 'S' : lcd.cls(); lcd.locate(1,1); lcd.printf("Sam is on his way and will be with you shortly"); wait(30);
+                                case 'L' : lcd.cls(); lcd.locate(1,1); lcd.printf("Louis is on his way and will be with you shortly"); wait(30);
+                                case 'M' : lcd.cls(); lcd.locate(1,1); lcd.printf("Max is on his way and will be with you shortly"); wait(30);
+                                case 'J' : lcd.cls(); lcd.locate(1,1); lcd.printf("Jemma is on her way and will be with you shortly"); wait(30);
+                                default : lcd.cls(); lcd.locate(1,1); lcd.printf("Please wait, someone will be with you shortly"); wait(30);
+                            }    
+                        }
+                        else { waiting++; wait(1); }
                     }
-                    else { waiting++; wait(1); }
+                    if (waiting == 60) { lcd.cls(); lcd.locate(1,1); lcd.printf("No reply received - please knock"); }
+                    waiting = 0;
                 }
-                if (waiting == 60) { lcd.cls(); lcd.locate(1,1); lcd.printf("No reply received - please knock"); }
-                waiting = 0;
+                
+                else if(c == 'n') { lcd.cls(); lcd.locate(1,1); lcd.printf("No connection - please knock"); }
             }
+            else { lcd.cls(); lcd.locate(1,1); lcd.printf("No connection - please knock"); }
             
-            //else if(c = "n") { lcd.cls(); lcd.locate(1,1); lcd.printf("No connection - please knock"); }
-        }
-        else { lcd.cls(); lcd.locate(1,1); lcd.printf("No connection - please knock"); }
-        
-        sw2_trig = 0;
-        sw3_trig = 0;
+            sw2_trig = 0;
+            sw3_trig = 0;
+            lcd.cls();
+         }   
     }
 }
