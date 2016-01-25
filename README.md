@@ -8,3 +8,8 @@ This repo requires the following node modules:
 
 - [facebook-chat-api](https://www.npmjs.com/package/facebook-chat-api)
 - [serialport](https://www.npmjs.com/package/serialport)
+
+# Setup
+
+You will need to run `npm install` to install the above modules.
+After installation, run `node index.js` to initiate the program.

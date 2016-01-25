@@ -14,24 +14,25 @@ int main (void) {
   bool xbeeWaiting = true;
   bool hostWaiting = false;
   for(;;) {
-    while(xbeeWaiting) {
-      wait(0.5);
+    while(xbeeWaiting) { //Will wait for a response from the doorbell device
+      wait(0.5f);
       if(xbee.readable()) {
         xbeeWaiting = false;
       }
     }
-    xbee.putc('A');
-    host.putc('B');
+    xbee.printf('A');
+    host.printf('B');
     hostWaiting = true;
     int timer = 0;
-    while(hostWaiting) {
+    while(hostWaiting) { //Will wait 60 seconds for a reply from facebook, if no response it will wait for another door bell to be rung
       redLed = 0;
       buzzer.period(1.0);
       buzzer=0.5;
+      wait(0.5f);
       if(timer >= 60) hostWaiting = false;
-      wait(1);
       buzzer=0.0;
       redLed = 1;
+      wait(0.5f); //Seperating waits into 0.5 second gaps emulates the buzzer and LED to turn off and on, as an indicator someone is at the door
       timer++;
       if(host.readable()) hostWaiting = false;
     }
